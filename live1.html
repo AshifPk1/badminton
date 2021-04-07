@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Scrore Board</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="ScoreBoard" style="display:flex">
+    <table style="width:100%;height:100%">
+        <tr>
+            <th style="width:50%;height:100%" colspan="3"><span id="Team1Player1">Player 1</span><br/><span
+                    id="Team1Player2">Player 2</span></th>
+            <td class="live_team_1" id="live_team_1">0</td>
+
+            <!--    </tr>-->
+        <tr>
+            <td class="set_1" id="Team1PointSet1">0
+            </td>
+            <td class="set_2" id="Team1PointSet2">0
+            </td>
+            <td class="set_3" id="Team1PointSet3">0
+            </td>
+        </tr>
+        <tr>
+            <td class="set_1" id="Team2PointSet1">0</td>
+            <td class="set_2" id="Team2PointSet2">0</td>
+            <td class="set_3" id="Team2PointSet3">0</td>
+        </tr>
+        <tr>
+            <th style="width:50%;height:100%" colspan="3"><span id="Team2Player1">Player 1</span><br/><span
+                    id="Team2Player2">Player 2</span></th>
+            <td class="live_team_2" id="live_team_2">0</td>
+
+        </tr>
+
+
+    </table>
+</div>
+
+<div id="TimerAdd" style="display:none">
+    <div class="timerBox">
+        <div class="timer-container" style="	font-size: 22vh;
+	text-align: center;
+	height:100%;
+	width:40%;
+	display:flex;
+	justify-content:center;
+	align-items:center;">
+            <h1 id="timer">60</h1>
+        </div>
+        <br/>
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <img src="index.jpeg" style="height:100%;width:auto">
+            </div>
+            <div class="mySlides fade">
+                <img src="index2.jpeg" style="height:100%;width:auto">
+            </div>
+            <div class="mySlides fade">
+                <img src="Valley-Taurus-Mountains-Turkey.jpg" style="height:100%;width:auto">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="advertisement" style="display:none">
+    <div class="advertisement-slide">
+        <div class="mySlidesAdv fade">
+            <img src="index.jpeg" style="height:100%;width:auto">
+        </div>
+        <div class="mySlidesAdv fade">
+            <img src="index2.jpeg" style="height:100%;width:auto">
+        </div>
+        <div class="mySlidesAdv fade">
+            <img src="Valley-Taurus-Mountains-Turkey.jpg" style="height:100%;width:auto">
+        </div>
+    </div>
+</div>
+
+<center><h2 style="color:white;">Powered By <span style="font-size: 40px;">Hamrut</span></h2></center>
+<!--<center><a href="timer.html">-->
+<!--    <button style="color:green;font-size: 3em;">INTERVAL</button>-->
+<!--</a></center>-->
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+<script>
+    var timer_interval;
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyC_wHjeBXDr_xSDDjR0rbQJEOn2EFFJOz4",
+    authDomain: "badmintonscore-1cbbd.firebaseapp.com",
+    databaseURL: "https://badmintonscore-1cbbd-default-rtdb.firebaseio.com",
+    projectId: "badmintonscore-1cbbd",
+    storageBucket: "badmintonscore-1cbbd.appspot.com",
+    messagingSenderId: "437926531801",
+    appId: "1:437926531801:web:c844a13e22cd166db664c8",
+    measurementId: "G-TE350G055V"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+
+
+  // get all data
+
+function SelectAllData(){
+
+var database = firebase.database();
+database.ref('Fixtures/Live/Live1').on('value',function(AllRecords){
+var Team1Player1 = AllRecords.val().Team1Player1
+var Team1Player2 = AllRecords.val().Team1Player2
+var Team2Player1 = AllRecords.val().Team2Player1
+var Team2Player2 = AllRecords.val().Team2Player2
+
+length = AllRecords.val().Sets.length
+ScreenType = AllRecords.val().ScreenType
+ServingTeam = AllRecords.val().ServingTeam
+
+if (AllRecords.val().Sets[1]) {
+  var Team1PointSet1 = AllRecords.val().Sets[1].Team1Point
+var Team2PointSet1 = AllRecords.val().Sets[1].Team2Point
+} else {
+  var Team1PointSet1 = 0
+  var Team2PointSet1 = 0
+}
+
+
+if (AllRecords.val().Sets[2]) {
+var Team1PointSet2 = AllRecords.val().Sets[2].Team1Point
+var Team2PointSet2 = AllRecords.val().Sets[2].Team2Point
+} else {
+  var Team1PointSet2 = 0
+  var Team2PointSet2 = 0
+}
+
+if (AllRecords.val().Sets[3]) {
+
+var Team1PointSet3 = AllRecords.val().Sets[3].Team1Point
+var Team2PointSet3 = AllRecords.val().Sets[3].Team2Point
+} else {
+  var Team1PointSet3 = 0
+  var Team2PointSet3 = 0
+}
+
+
+
+
+AddItems(Team1Player1,Team1Player2,Team2Player1,Team2Player2,Team1PointSet1,Team2PointSet1,Team1PointSet2,Team2PointSet2,Team1PointSet3,Team2PointSet3,length,ScreenType,ServingTeam);
+});
+}
+
+
+
+function AddItems(Team1Player1,Team1Player2,Team2Player1,Team2Player2,Team1PointSet1,Team2PointSet1,Team1PointSet2,Team2PointSet2,Team1PointSet3,Team2PointSet3,length,ScreenType,ServingTeam){
+// <!--div hide based on screen type-->
+
+var ScoreBoard_tag = document.getElementById('ScoreBoard');
+var TimerAdd_tag = document.getElementById('TimerAdd');
+var advertisement_tag = document.getElementById('advertisement');
+
+if (ScreenType == "Timer"){
+TimerAdd_tag.style.display = "flex";
+ScoreBoard_tag.style.display = "none";
+advertisement_tag.style.display = "none";
+
+var OneMinutes = 60 * 1,
+display = document.querySelector('#timer');
+clearInterval(timer_interval);
+startTimer(OneMinutes, display);
+
+}
+
+if (ScreenType == "Advertisement"){
+advertisement_tag.style.display = "flex";
+ScoreBoard_tag.style.display = "none";
+TimerAdd_tag.style.display = "none";
+}
+
+if (ScreenType == "Score"){
+ScoreBoard_tag.style.display = "flex";
+TimerAdd_tag.style.display = "none";
+advertisement_tag.style.display = "none";
+}
+
+
+var Team1Player1_tag = document.getElementById('Team1Player1');
+var Team1Player2_tag = document.getElementById('Team1Player2');
+var Team2Player1_tag = document.getElementById('Team2Player1');
+var Team2Player2_tag = document.getElementById('Team2Player2');
+Team1Player1_tag.innerHTML=Team1Player1
+Team1Player2_tag.innerHTML=Team1Player2
+Team2Player1_tag.innerHTML=Team2Player1
+Team2Player2_tag.innerHTML=Team2Player2
+
+var Team1PointSet1Tag = document.getElementById('Team1PointSet1');
+var Team2PointSet1Tag = document.getElementById('Team2PointSet1');
+var Team1PointSet2Tag = document.getElementById('Team1PointSet2');
+var Team2PointSet2Tag = document.getElementById('Team2PointSet2');
+var Team1PointSet3Tag = document.getElementById('Team1PointSet3');
+var Team2PointSet3Tag = document.getElementById('Team2PointSet3');
+Team1PointSet1Tag.innerHTML=Team1PointSet1
+Team2PointSet1Tag.innerHTML=Team2PointSet1
+Team1PointSet2Tag.innerHTML=Team1PointSet2
+Team2PointSet2Tag.innerHTML=Team2PointSet2
+Team1PointSet3Tag.innerHTML=Team1PointSet3
+Team2PointSet3Tag.innerHTML=Team2PointSet3
+
+
+var live_team_1_tag = document.getElementById('live_team_1');
+var live_team_2_tag = document.getElementById('live_team_2');
+
+if (ServingTeam === "Team1"){
+live_team_1_tag.style.background = "yellow";
+live_team_2_tag.style.background = "none";
+}
+
+if (ServingTeam == "Team2"){
+live_team_1_tag.style.background = "none";
+live_team_2_tag.style.background = "yellow";
+}
+
+
+if (length==2) {
+live_team_1_tag.innerHTML=Team1PointSet1
+live_team_2_tag.innerHTML=Team2PointSet1
+} else {
+if (length==3){
+live_team_1_tag.innerHTML=Team1PointSet2
+live_team_2_tag.innerHTML=Team2PointSet2
+}
+else {
+live_team_1_tag.innerHTML=Team1PointSet3
+live_team_2_tag.innerHTML=Team2PointSet3
+}
+
+}
+
+
+
+
+}
+
+
+SelectAllData();
+
+
+// <!--Timer-->
+function startTimer(duration, display) {
+
+    var timer = duration
+    timer_interval =    setInterval(function () {
+        seconds = timer
+
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent =  seconds;
+
+        if (--timer < 0) {
+            display.textContent =  0;
+            var ScoreBoard_tag = document.getElementById('ScoreBoard');
+            var TimerAdd_tag = document.getElementById('TimerAdd');
+            var advertisement_tag = document.getElementById('advertisement');
+            ScoreBoard_tag.style.display = "flex";
+            TimerAdd_tag.style.display = "none";
+            advertisement_tag.style.display = "none";
+        }
+    }, 1000);
+}
+
+
+
+
+// <!--slide show -->
+
+
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 2000); // Change image every 2 seconds
+}
+
+
+var slideIndexAdv = 0;
+showSlidesAdv();
+
+function showSlidesAdv() {
+  var i;
+  var slides = document.getElementsByClassName("mySlidesAdv");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndexAdv++;
+  if (slideIndexAdv > slides.length) {slideIndexAdv = 1}
+  slides[slideIndexAdv-1].style.display = "block";
+  setTimeout(showSlidesAdv, 2000); // Change image every 2 seconds
+}
+
+
+</script>
+</body>
+</html>
